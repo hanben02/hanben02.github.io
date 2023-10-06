@@ -76,7 +76,9 @@ class King extends Piece {
         this.path += this.white ? King.whitePath : King.blackPath;
     }
     canMove(start,end){
-        super.canMove();
+        if(!super.canMove(start,end)){
+            return false;
+        }
         const y_move = start.row - end.row;
         const x_move = start.column - end.column
         if(Math.abs(y_move) > 1 || Math.abs(x_move) > 1) {

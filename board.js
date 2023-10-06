@@ -71,6 +71,9 @@ class Board {
         this.tiles = this.resetBoard();
         
     }
+    decode_fen(fen){
+        decodeFen(fen,this)
+    }
     resetBoard(){
         var tiles = []
         for(let i = 0; i < 8; i++){
@@ -96,9 +99,6 @@ class Board {
             
             let multX = x_move < 0 ? 1 : -1;
             let multY = y_move < 0 ?  1 : -1;
-            console.log(x_move,y_move)
-            console.log("---------------")
-            console.log(multX,multY)
             x += i < Math.abs(x_move) ? multX : 0;
             y += i < Math.abs(y_move) ? multY : 0;
             if(this.tiles[y][x].has_piece()){
@@ -107,16 +107,20 @@ class Board {
         }
         return true
     }
-    set_king(tile,white){
-        if(white){
-            this.white_king = tile;
+
+    get_tiles(type,white){
+        let positions = []
+        for(let y = 0; y < 8; y++){
+            for(let x = 0; x < 8; x++){
+                if(this.tiles[y][x]?.piece instanceof type && this.tiles[y][x]?.piece.white){
+                    positions.push(this.tiles[y][x])
+                }
+            }
         }
-        else{
-            this.black_king = tile;
+        if(positions.length == 0) {
+            return undefined
         }
-    }
-    get_king(white){
-        return white ? this.white_king : this.black_king;
+        return positions.length > 1 ? positions : positions[0]
     }
     tile_is_threated(tile){
         for(let y = 0; y < this.tiles.length; y++){
@@ -131,7 +135,6 @@ class Board {
                 }
             }
         }
-        console.log("not threated");
         return false;
     }
 }

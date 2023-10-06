@@ -20,13 +20,11 @@ function decodeFen(FEN,board) {
                 var tile = board.getTile(y,x)
                 var king = new King(false);
                 tile.set_piece(king);
-                board.black_king = tile; 
                 break;
             case "K":
                 var tile = board.getTile(y,x);
                 var king = new King(true);
                 tile.set_piece(king);
-                board.white_king = tile;
                 break;
             case "p":
                 var tile = board.getTile(y,x)
@@ -73,7 +71,9 @@ class currentPiece{
 function onDrag(){
 }
 function onDrop(currentTile){
-    console.log(currentTile.piece.white)
+    if(currentTile.piece.white != game.currentPlayer.white){
+        return;
+    }
     if(currentTile.piece.canMove(currentTile,currentPiece.target)){
         let hasPiece = false;
         let this_piece = undefined;
@@ -82,22 +82,21 @@ function onDrop(currentTile){
             this_piece = currentPiece.target.piece;
             currentPiece.target.remove_piece();
         }
-        if(currentTile.piece instanceof King){
-            currentTile.board.set_king(currentPiece.target,currentTile.piece.white);
-        }
         currentTile.piece.move(currentTile,currentPiece.target)
-        if(currentTile.board.tile_is_threated(currentTile.board.get_king(currentPiece.target.piece.white))){
+        if(game.board.tile_is_threated(game.board.get_tiles(King))){
 
             currentPiece.target.piece.move(currentPiece.target,currentTile)
             if(hasPiece){
                 currentPiece.target.set_piece(this_piece)
             }
-            if(currentTile.piece instanceof King){
-                currentTile.board.set_king(currentTile,currentPiece.target.piece.white);
-            }
         }
-
-
+        else if(currentPiece.target.piece instanceof Pawn) {
+            currentPiece.target.piece.hasMoved = true;
+            game.move()
+        }
+        else{
+            game.move()
+        }
     }
 }   
 function onHover(over){
