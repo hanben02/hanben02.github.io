@@ -83,7 +83,7 @@ function onDrop(currentTile){
             currentPiece.target.remove_piece();
         }
         currentTile.piece.move(currentTile,currentPiece.target)
-        if(game.board.tile_is_threated(game.board.get_tiles(King))){
+        if(game.board.tile_is_threated(game.board.get_tiles(King,game.currentPlayer.white))){
 
             currentPiece.target.piece.move(currentPiece.target,currentTile)
             if(hasPiece){

@@ -112,7 +112,7 @@ class Board {
         let positions = []
         for(let y = 0; y < 8; y++){
             for(let x = 0; x < 8; x++){
-                if(this.tiles[y][x]?.piece instanceof type && this.tiles[y][x]?.piece.white){
+                if(this.tiles[y][x]?.piece instanceof type && this.tiles[y][x]?.piece.white == white){
                     positions.push(this.tiles[y][x])
                 }
             }
